@@ -1,4 +1,7 @@
-# git
+# Git
+## git command
+https://www.jianshu.com/p/590c88295a8c 
+## windows git
 https://www.jianshu.com/p/9beb880332ba
 
 # VS Code
