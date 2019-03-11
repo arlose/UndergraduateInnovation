@@ -6,6 +6,7 @@
 
 # VS Code
 https://www.jianshu.com/p/990b19834896
+https://www.cnblogs.com/shawWey/p/8931697.html
 
 # Markdown
 https://www.jianshu.com/p/564bdf3a9462
