@@ -1,0 +1,27 @@
+from PIL import Image
+
+char_list = list("$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,\"^`'. ")
+#WIDTH = 75
+#HEIGHT = 45
+
+def get_char(r, g, b, a=256):
+    if a == 0:
+        return ' '
+    length = len(char_list)
+    gray = int(0.2126 * r + 0.7152 * g + 0.0722 * b) #计算灰度值
+    unit = (256.0 + 1) / length
+    return char_list[int(gray / unit)]  #不同的灰度值对应着不同的字符
+
+if __name__ == '__main__':
+    img = 'F:/BKCX/work/picture/5.jpg'
+    im = Image.open(img)
+    im.show()
+    WIDTH = int(im.width/6)
+    HEIGHT = int(im.height/15)
+    im = im.resize((WIDTH, HEIGHT))
+    t = ""
+    for x in range(HEIGHT):
+        for y in range(WIDTH):
+            t += get_char(*im.getpixel((y, x))) #获得相应的字符
+        t += '\n'
+    print(t)
