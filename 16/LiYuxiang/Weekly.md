@@ -10,8 +10,7 @@
 | 遇到的问题 |
 | :--------- |
 |  1、在获取视频流的时候直接使用cv2.VideoCapture(0)，会导致摄像头打不开的问题，网上说需要重新定义一下， |
-|        class MyVideoCapture(cv.VideoCapture):                 def __enter__(self): return self |
-|  def __exit__(self, *args):  self.release()。|  
+|  class MyVideoCapture(cv.VideoCapture): def __enter__(self): return self def __exit__(self, *args):  self.release()。 |
 |  2、之前数据采集不到，是因为我之前视频流好像没获取到，只是在cv2.imshow中显示，难怪一直没有数据，改了下 |
 |  之前的代码，然后再加一个循环终止条件用来关闭摄像头就好了。 |
 
