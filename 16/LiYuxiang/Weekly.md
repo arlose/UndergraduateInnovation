@@ -2,6 +2,33 @@
 
 ------
 
+## W26 06.24-06.30
+
+| 本周工作                                                     |
+| :----------------------------------------------------------- |
+|  1、总结上周学习Flask的笔记和项目中遇到的问题及经验。 |
+|  2、在树莓派上运行改良后的代码。 |
+|   |
+
+| 遇到的问题 |
+| :--------- |
+|   |
+|   |
+|   |
+|   |
+
+| 下周计划                           |
+| :--------------------------------- |
+|  下周有时间的话看看能不能提高人脸数据的训练效果。 |
+|                                    |
+|                                    |
+
+- 其他
+
+笔记、总结经验在周报的最后面。
+
+------
+
 ## W25 06.17-06.23
 
 | 本周工作                                                     |
@@ -595,4 +622,331 @@
 | q3   |
 
 * 其他
+
+# Flask学习笔记
+
+#### Falsk
+
+* 基于Python的**微**框架
+
+* **微**：尽量保持代码核心的简洁，不为开发者做过多的选择，给开发者更多的一个选择空间
+
+#### MVC/MTV
+
+* 一个软件架构设计思想
+
+* 解耦合
+
+* 将页面展示、数据操作、逻辑处理进行拆分
+
+* Models：模型
+
+* Templates：模板
+
+* Views：视图
+
+#### HelloFlask
+
+* 安装 pip install flask
+
+  * jinja2
+
+  * werkzukg wsgi工具集
+
+  * ```
+  form flask import Flask
+    app = Flask(__name__)
+    
+    @app.route('/')
+    def index()；
+    	return 'Hello Flask'
+    ```
+
+* 书写项目
+
+  * ```
+    app.run()
+    ```
+
+* 请求流程
+
+  * 浏览器——路由器（route）
+  * 路由器——视图函数（views）
+  * 视图函数——模型（modules）
+  * 模型——视图函数
+  * 视图函数——模板（templates）
+  * 模板——浏览器
+
+* Views：
+
+  * 路由器
+    * 参数
+      * 路径参数中的关键字参数
+      * <var>默认类型都会被认为是string
+      * 语法：<converter:var>
+        * converter：转换器，格式约束工具
+        * string：不把  **'/'**  作为参数的一部分
+        * int：约束为int类型
+        * float：约束为float类型
+        * path：把  **'/'**  作为参数的一部分
+        * uuid：校验uuid格式
+        * any：提供元祖元素当中中的任意元素
+
+  * 视图参数
+
+    * 路径参数
+      * 在host:port之后，在？之前的部分
+      * 位置参数
+      * 关键字参数
+
+    * 请求参数
+      * ？之后的部分，get请求参数
+      * post请求参数在请求体中
+
+  * Request
+    * 请求
+    * Flask根据Http报文创建的请求对象
+    * methods：请求方法
+    * url：
+    * path：
+    * host：
+    * cookie：
+    * args：GET里面的参数
+      * 类字典结构
+      * 每一项都是一个元祖
+      * 元祖包括两个子元素，左侧是key，右侧是value
+      * key是可重复的
+      * ImmutableMultiDict
+      * dict['name']
+      * dict.get('name')
+      * dict.getlist('name')
+    * form：POST提交的参数
+    * files：文件上传参数
+    * remote_addr：远端IP地址
+    * user-agent：浏览器访问标志
+  
+  * Response
+    * 字符串（content，status）
+    * render_template
+    * make_response
+    * Response
+    * 响应类型
+      * Response对象
+      * redirect
+      * about
+      * json
+        * jsonify进行包装
+  
+  * 会话技术
+  
+    * 出现场景：后续的请求需要前面请求返回的数据
+    * 原因
+      * web开发中，使用的http基本都是短连接
+      * 生命周期非常短，从Request开始到Response结束
+  
+    * 实现机制：让客户知道自己是谁
+  
+    * cookie
+  
+      * 客户端会话技术
+  
+      * 数据存储在客户端中，浏览器中
+  
+      * 特性
+  
+        * 存储结构：key-value
+        * 支持过期时间
+          * max-age
+          * expires
+  
+        * 不能跨域名
+        * 不能跨浏览器
+        * 默认会携带本网站的所有cookies
+        * 默认明文传输
+        * 默认不支持中文
+  
+      * flask中的cookie可以直接使用中文：对不支持的语言进行了解码
+      * cookie支持中文
+        * 使用编码解码
+        * 使用加密解密
+  
+    * session
+  
+      * 服务器会话技术
+      * 数据存储在服务器
+      * 特性
+        * 依赖cookie
+        * 支持过期
+        * key-value存储结构
+  
+      * session在flask默认没有实现持久化
+      * 实现持久化
+        * 插件：flask-session
+  
+    * token
+      * 服务端会话技术
+      * 手动实现的session
+      * 如果用来web中和session基本一致
+      * 在专用客户端中，不支持cookie
+      * 需要客户端自己维护token
+
+* Templates
+
+  * 主要是帮助开发者生成用户查看的页面
+
+  * 组成结构
+
+    * 静态html
+
+    * 动态模板语法
+
+      * {{ var }}
+
+      * {{ tag }}
+
+        * 结构标签
+
+          * block
+            * 默认填坑会覆盖所有内容
+            * 不想覆盖{{ super() }}
+
+          * entends
+          * include
+          * macro
+            * 宏定义
+            * 定义函数
+            * 提高代码复用率
+            * 函数主要生成了结构的html
+            * 亮点{% from xxx import xxx %}
+            * 通常会有专门的文件存放宏定义
+
+  * 过滤器
+    * {{ var|过滤器|过滤器 }}
+    * 过滤器可以写多个，但执行顺序不一定从前向后
+    * 本质上是函数
+    * 允许接收参数
+
+  * 加载过程
+    * 先加载
+    * 后渲染
+
+  * 插件：flask-bootstrap
+  * flash
+    * 消息闪现
+      * 在Python中：flash ('message')
+      * 在templates中：get_flash_messages()
+    * 自己实现
+      * 使用session
+      * 需要维护所有资源
+
+* Model
+  * 模型
+  * 
+
+
+
+#### 插件
+
+* Flask-script
+
+  * 在终端动态接受命令行参数，传递到Python代码中
+  * 使用流程
+    * pip install flask-script
+    * 初始化
+      * 使用app对象构建manager
+      * 启动的时候，使用manager去run
+
+  * 具体使用
+    * shell：加载一个flask环境的终端
+    * runserver
+      * 启动服务器
+      * -r：加载
+      * -d：Debug模式
+      * -p：Port，端口
+      * -h：Host，主机
+
+
+
+* flask-blueprint
+
+  * 蓝图，蓝本
+  * 对程序一个规划
+  * 解决循环引用问题
+  * 拆分了views，代替了用app来注册路由的问题
+  * 使用流程
+    * pip install flask-blueprint
+    * 初始化
+      * 创建蓝图对象
+        * 蓝图名字唯一，见名知意
+        * 导入名字
+
+  * 使用
+    * 和app注册路由基本一致
+    * @blue.route()
+
+  * url_for
+    * endpoint：默认函数名字
+    * 蓝图中使用：蓝图名.函数名
+
+
+
+* flask-session
+  - 安装：pip install flask-session
+  - 初始化：使用app构造一个session对象
+    - 配置SESSION_TYPE
+    - 配置SECRET_KEY
+
+
+
+* flask-boostrap
+
+  * 使用流程
+    * 安装：pip install flask-bootstrap
+    * 使用app构造一个Bootstrap对象
+
+  * 为开发者实现
+    * 导入Bootstrap CDN
+    * 创建base.html
+      * 划分block
+      * doc
+      * html
+      * head
+      * body
+      * title
+      * metas
+      * styles
+      * navbar
+      * content
+
+  * 新大陆
+    * IE8 兼容
+    * Google 统计，分析
+    * 消息渲染
+
+
+
+#### 项目拆分
+
+* 对项目有一个美好的规划，提升项目的一个扩展性
+
+* 解耦合
+
+* MTV
+
+* 拆分流程
+
+  * manage.py：控制管理程序
+  * App：真正的应用
+  * App / __ init __ ：
+    * 进行全局创建，初始化
+    * 创建一个Flask对象 app
+
+  * App / settings ：在init中调用settings，进行项目整体初始化
+  * App / views ：在全局初始化之后，注册蓝图，添加路由
+  * App / ext ：统一管理第三方包
+  * App / models：模型
+
+````
+
+````
 -------------------------------------------------------------
